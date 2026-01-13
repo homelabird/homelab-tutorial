@@ -1,0 +1,47 @@
+auto lo
+iface lo inet loopback
+
+auto enp4s0
+iface enp4s0 inet manual
+        ovs_type OVSPort
+        ovs_bridge vmbr0
+
+auto enx00e04c680140
+iface enx00e04c680140 inet manual
+        ovs_type OVSPort
+        ovs_bridge vmbr1
+
+auto vlan10
+iface vlan10 inet manual
+        ovs_type OVSIntPort
+        ovs_bridge vmbr2
+        ovs_options tag=10
+#vlan10
+
+auto vlan20
+iface vlan20 inet manual
+        ovs_type OVSIntPort
+        ovs_bridge vmbr2
+        ovs_options tag=20
+#vlan20
+
+auto vmbr0
+iface vmbr0 inet static
+        address 192.168.0.250/22
+        gateway 192.168.1.1
+        ovs_type OVSBridge
+        ovs_ports enp4s0
+
+auto vmbr1
+iface vmbr1 inet manual
+        ovs_type OVSBridge
+        ovs_ports enx00e04c680140
+#WAN
+
+auto vmbr2
+iface vmbr2 inet manual
+        ovs_type OVSBridge
+        ovs_ports vlan10 vlan20
+#LAN
+
+source /etc/network/interfaces.d/*
